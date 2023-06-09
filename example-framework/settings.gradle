@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+include "example-cache"
+include "example-tenant"
+include "example-logging"
+include "framework-platform"
+include "framework-bom"
+
+rootProject.name = "example"
+rootProject.children.each { project ->
+    project.buildFileName = "${project.name}.gradle"
+}

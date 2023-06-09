@@ -1,0 +1,69 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.15.2"
+		classpath "io.spring.gradle:dependency-management-plugin:1.1.0"
+	}
+}
+
+ext {
+	moduleProjects = subprojects.findAll { it.name.startsWith("example-") }
+	javaProjects = subprojects - project(":framework-bom") - project(":framework-platform")
+}
+
+configure(allprojects) { project ->
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+}
+
+configure([rootProject] + javaProjects) { project ->
+	group = "com.example"
+
+	apply plugin: "java-library"
+	apply plugin: "maven-publish"
+	apply from: "$rootDir/gradle/dependencyManagement.gradle"
+
+	sourceCompatibility = 17
+	targetCompatibility = 17
+
+	configurations {
+		dependencyManagement {
+			canBeConsumed = false
+			canBeResolved = false
+			visible = false
+		}
+		matching { it.name.endsWith("Classpath") }.all { it.extendsFrom(dependencyManagement) }
+	}
+
+	dependencies {
+		dependencyManagement(enforcedPlatform(dependencies.project(path: ":framework-platform")))
+
+		compileOnly("org.projectlombok:lombok:$lombokVersion")
+		annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+}
+
+configure(moduleProjects) { project ->
+	apply from: "${rootDir}/gradle/module.gradle"
+}
+
+configure(rootProject) {
+	description = "Example Framework"
+}
+
+allprojects {
+	version='1.1.0'
+}
+
+apply from: "$rootDir/gradle/incrementVersion.gradle"

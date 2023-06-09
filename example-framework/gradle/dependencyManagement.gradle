@@ -1,0 +1,12 @@
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    dependencies {
+        dependency "org.springframework.boot:spring-boot:$springBootVersion"
+        dependency "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
+        dependency "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+        dependency "org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion"
+
+        dependency "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    }
+}

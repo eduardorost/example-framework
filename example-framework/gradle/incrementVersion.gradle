@@ -1,0 +1,24 @@
+task printVersion {
+    doLast {
+        println "version=${version}"
+    }
+}
+
+task incrementVersion {
+    doLast {
+		def versionParts = version.split(/\./).collect{it.toInteger()}
+		def bumpedMajor = versionParts[0]
+		def bumpedMinor = versionParts[1]
+		def bumpedPath = versionParts[2]
+
+		if(project.hasProperty('bumpPatch')) {
+			bumpedPath += 1
+		} else {
+			bumpedMinor += 1
+		}
+
+		def bumpedVersion = "${bumpedMajor}.${bumpedMinor}.${bumpedPath}"
+        String s = buildFile.getText().replaceFirst("version='$version'", "version='$bumpedVersion'")
+        buildFile.setText(s)
+    }
+}

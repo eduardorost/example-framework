@@ -1,0 +1,11 @@
+description = "Example Logging"
+
+dependencies {
+    api("org.springframework:spring-web")
+    api("commons-io:commons-io:2.12.0")
+    api("io.opentracing:opentracing-util:0.33.0")
+    api("jakarta.servlet:jakarta.servlet-api:$jakartaServletApiVersion")
+    api("org.slf4j:slf4j-api:$slf4jVersion")
+
+    api(project(':example-tenant'))
+}

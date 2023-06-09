@@ -1,0 +1,9 @@
+description = "Example Tenant"
+
+dependencies {
+    api("org.springframework:spring-web")
+    api("org.springframework.boot:spring-boot")
+    api("org.springframework.boot:spring-boot-starter-security")
+
+    api("jakarta.servlet:jakarta.servlet-api:$jakartaServletApiVersion")
+}
